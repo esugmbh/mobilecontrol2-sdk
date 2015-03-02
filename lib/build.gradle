@@ -10,10 +10,10 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-def mavenVersion = '1.0-SNAPSHOT'
-
+// Maven settings
 group = 'eu.esu.mobilecontrol2'
-version = mavenVersion
+project.archivesBaseName = 'sdk'
+version = '1.0-SNAPSHOT'
 
 repositories {
     jcenter()
@@ -27,7 +27,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 21
         versionCode 1
-        versionName mavenVersion
+        versionName version
     }
 
     compileOptions {
@@ -64,10 +64,10 @@ artifacts {
 
 uploadArchives {
     repositories {
+        // TODO: define external repository such as MavenCentral or JCenter
         mavenInstaller()
     }
 }
-
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
