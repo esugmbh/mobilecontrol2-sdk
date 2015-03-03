@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015 ESU electronic solutions ulm GmbH & Co KG
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE.txt file for details.
+ */
+
 package eu.esu.mobilecontrol2.sdk;
 
 import android.annotation.TargetApi;
@@ -46,7 +53,8 @@ public final class MobileControl2 {
     private final static String ROOT_RED_LED = "/sys/class/leds/mc2:red:led1";
     private final static String ROOT_GREEN_LED = "/sys/class/leds/mc2:green:led2";
 
-    private final static boolean RUNS_ON_MOBILECONTROL2 = Build.MODEL.equalsIgnoreCase("MobileControlII")
+    private final static boolean RUNS_ON_MOBILECONTROL2 =
+            Build.MODEL.equalsIgnoreCase("MobileControlII")
             || Build.MODEL.equalsIgnoreCase("Mobile Control II")
             || Build.MODEL.equalsIgnoreCase("SmartController");
 
@@ -54,7 +62,7 @@ public final class MobileControl2 {
     }
 
     /**
-     * Returns if the app is running on a Mobile Control II.
+     * Returns if the app is running on a Mobile Control II or a compatible device.
      *
      * @return {@code true} if running on a Mobile Control II else {@code false}.
      */
@@ -99,8 +107,8 @@ public final class MobileControl2 {
 
         try {
             writeText(ledPath(which, "trigger"), "timer");
-            writeText(ledPath(which, "delayOn"), Integer.toString(onMs));
-            writeText(ledPath(which, "delayOff"), Integer.toString(offMs));
+            writeText(ledPath(which, "delay_on"), Integer.toString(onMs));
+            writeText(ledPath(which, "delay_off"), Integer.toString(offMs));
         } catch (IOException ex) {
             Log.e(TAG, "Set brightness failed", ex);
         }
