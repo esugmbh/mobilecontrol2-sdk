@@ -54,8 +54,8 @@ public class ThrottleFragment extends Fragment {
      *     if (keyEvent == ThrottleFragment.KEYCODE_THROTTLE_WAKEUP) {
      *         return true;
      *     }
-     *     // Your code here.
-     * }
+     * <p/>
+     *     return super.onKeyDown(keyCode, keyEvent);
      * }
      * </pre>
      */
@@ -66,14 +66,17 @@ public class ThrottleFragment extends Fragment {
     private final Messenger mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
     private Messenger mSender;
     private boolean mThrottleBound;
+    private int mZeroPosition;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mSender = new Messenger(service);
-            final Message msg = Message.obtain(null, MSG_REGISTER_CLIENT);
-            msg.replyTo = mReceiver;
-            sendMessage(msg);
+            final Message msgRegister = Message.obtain(null, MSG_REGISTER_CLIENT);
+            msgRegister.replyTo = mReceiver;
+            sendMessage(msgRegister);
+
+            sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, mZeroPosition, 0));
             mThrottleBound = true;
         }
 
@@ -88,11 +91,20 @@ public class ThrottleFragment extends Fragment {
 
     /**
      * Creates a new instance of the {@link eu.esu.mobilecontrol2.sdk.ThrottleFragment} class.
+     * <p/>
+     * The {@code zeroPosition} defines the lowest position where the throttle may stop. If the current position is
+     * lower than {@code zeroPosition} the throttle will try to move to the position.
      *
+     * @param zeroPosition The zeroPosition.
      * @return A new throttle fragment instance.
      */
-    public static ThrottleFragment newInstance() {
-        return new ThrottleFragment();
+    public static ThrottleFragment newInstance(int zeroPosition) {
+        Bundle args = new Bundle();
+        args.putInt("zeroPosition", checkPosition(zeroPosition));
+
+        ThrottleFragment fragment =  new ThrottleFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     private static int checkPosition(int position) {
@@ -106,6 +118,8 @@ public class ThrottleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mZeroPosition = getArguments().getInt("zeroPosition", 0);
 
         if (Throttle.isInstalled(getActivity())) {
             Log.d(TAG, "Found Mobile Control II Throttle, binding service.");
@@ -138,18 +152,6 @@ public class ThrottleFragment extends Fragment {
         if (mThrottleBound) {
             final Message msg = Message.obtain(null, MSG_MOVE_TO, checkPosition(position), 0);
             sendMessage(msg);
-        }
-    }
-
-    /**
-     * Sets the throttle's zero position.
-     *
-     * @param position The new throttle zero position, range 0 - 255.
-     * @throws java.lang.IllegalArgumentException "position" is out of range.
-     */
-    public void setZeroPosition(int position) {
-        if (mThrottleBound) {
-            final Message msg = Message.obtain(null, MSG_SET_ZERO_POSITION, checkPosition(position), 0);
         }
     }
 
