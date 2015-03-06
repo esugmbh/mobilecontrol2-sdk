@@ -32,23 +32,15 @@ public final class Throttle {
 
     /**
      * Command to change the throttle position. Set {@link Message#arg1} to the
-     * position. Range: 0 - 126.
+     * position. Range: 0 - 255.
      */
     public static final int MSG_MOVE_TO = 3;
 
     /**
      * Command to set the zero position of the throttle. Set
      * {@link Message#arg1} to the position. Range: 0 - 255.
-     * <p/>
-     * If the throttle ensures that the current position is greater that the
-     * zero position.
      */
     public static final int MSG_SET_ZERO_POSITION = 4;
-
-    /**
-     * Sets the number of steps including 0. Range 0 - 127.
-     */
-    public static final int MSG_SET_STEP_COUNT = 8;
 
     /**
      * Callback that is invoked when the position has changed by user input,
@@ -93,5 +85,4 @@ public final class Throttle {
             return false;
         }
     }
-
 }

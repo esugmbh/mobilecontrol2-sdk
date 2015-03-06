@@ -31,7 +31,7 @@ import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_BUTTON_UP;
 import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_MOVE_TO;
 import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_POSITION_CHANGED;
 import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_REGISTER_CLIENT;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_SET_STEP_COUNT;
+import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_SET_ZERO_POSITION;
 import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_UNREGISTER_CLIENT;
 
 /**
@@ -41,7 +41,7 @@ import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_UNREGISTER_CLIENT;
  * detected all methods will do nothing so that the fragment just works if not running on another device.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-public class ThrottleFragment extends Fragment implements ThrottleControl {
+public class ThrottleFragment extends Fragment {
 
     /**
      * Key event used to wake up the device.
@@ -64,9 +64,7 @@ public class ThrottleFragment extends Fragment implements ThrottleControl {
     private final static String TAG = "Mobile Control II Throttle";
 
     private final Messenger mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
-
     private Messenger mSender;
-
     private boolean mThrottleBound;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
@@ -97,6 +95,14 @@ public class ThrottleFragment extends Fragment implements ThrottleControl {
         return new ThrottleFragment();
     }
 
+    private static int checkPosition(int position) {
+        if (position < 0 || position > 255) {
+            throw new IllegalArgumentException("position must be >= 0 and <= 255");
+        }
+
+        return position;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,24 +128,31 @@ public class ThrottleFragment extends Fragment implements ThrottleControl {
         super.onDestroy();
     }
 
-    @Override
+    /**
+     * Moves the throttle.
+     *
+     * @param position The new throttle position, range 0 - 255.
+     * @throws java.lang.IllegalArgumentException "position" is out of range.
+     */
     public void moveThrottle(int position) {
         if (mThrottleBound) {
-            final Message msg = Message.obtain(null, MSG_MOVE_TO, position, 0);
+            final Message msg = Message.obtain(null, MSG_MOVE_TO, checkPosition(position), 0);
             sendMessage(msg);
         }
     }
 
-    @Override
-    public void setThrottleStepCount(int count) {
+    /**
+     * Sets the throttle's zero position.
+     *
+     * @param position The new throttle zero position, range 0 - 255.
+     * @throws java.lang.IllegalArgumentException "position" is out of range.
+     */
+    public void setZeroPosition(int position) {
         if (mThrottleBound) {
-            Log.d(TAG, "Throttle step count = " + count);
-            final Message msg = Message.obtain(null, MSG_SET_STEP_COUNT, count, 0);
-            sendMessage(msg);
+            final Message msg = Message.obtain(null, MSG_SET_ZERO_POSITION, checkPosition(position), 0);
         }
     }
 
-    @Override
     public void setOnThrottleListener(OnThrottleListener listener) {
         mOnThrottleListener = listener;
     }
