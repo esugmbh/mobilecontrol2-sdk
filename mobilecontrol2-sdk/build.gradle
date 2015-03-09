@@ -12,15 +12,18 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
+
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 // Maven settings
+version = '1.0'
 group = 'eu.esu.mobilecontrol2'
-project.archivesBaseName = 'mobilecontrol2-sdk'
-version = '1.0-SNAPSHOT'
+
 
 repositories {
     jcenter()
@@ -49,6 +52,54 @@ android {
     }
 }
 
+def siteUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk'
+def gitUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk.git'
+
+bintray {
+    user = project.rootProject.properties['bintray.user']
+    key = project.rootProject.properties['bintray.key']
+
+    println user
+    println key
+
+    dryRun = false
+    publish = false
+
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = project.name
+        desc = 'ESU Mobile Control II SDK'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ['MIT']
+        publicDownloadNumbers = false
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'Mobile Control II SDK'
+                url siteUrl
+                licenses  {
+                    license {
+                        name = 'MIT license'
+                        url 'http://opensource.org/licenses/mit-license.php'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier 'sources'
@@ -64,16 +115,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier 'javadoc'
 }
 
+
 artifacts {
     archives javadocJar
     archives sourceJar
-}
-
-uploadArchives {
-    repositories {
-        // TODO: define external repository such as MavenCentral or JCenter
-        mavenInstaller()
-    }
 }
 
 dependencies {

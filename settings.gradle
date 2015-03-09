@@ -5,4 +5,4 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-include ':lib'
+include ':mobilecontrol2-sdk'

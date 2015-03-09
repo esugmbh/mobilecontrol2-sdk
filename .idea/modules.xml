@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mobilecontrol2-sdk/mobilecontrol2-sdk.iml" filepath="$PROJECT_DIR$/mobilecontrol2-sdk/mobilecontrol2-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/sdk.iml" filepath="$PROJECT_DIR$/sdk.iml" />
     </modules>
   </component>
