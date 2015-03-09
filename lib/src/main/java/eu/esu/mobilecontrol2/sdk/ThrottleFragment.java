@@ -63,7 +63,7 @@ public class ThrottleFragment extends Fragment {
 
     private final static String TAG = "Mobile Control II Throttle";
 
-    private final Messenger mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
+    private Messenger mReceiver;
     private Messenger mSender;
     private boolean mThrottleBound;
     private int mZeroPosition;
@@ -120,6 +120,7 @@ public class ThrottleFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mZeroPosition = getArguments().getInt("zeroPosition", 0);
+        mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
 
         if (Throttle.isInstalled(getActivity())) {
             Log.d(TAG, "Found Mobile Control II Throttle, binding service.");
@@ -171,6 +172,10 @@ public class ThrottleFragment extends Fragment {
         private final WeakReference<ThrottleFragment> mParent;
 
         public IncomingMessageHandler(WeakReference<ThrottleFragment> parent) {
+            if (parent == null) {
+                throw new NullPointerException("parent is null");
+            }
+
             mParent = parent;
         }
 
