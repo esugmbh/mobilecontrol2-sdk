@@ -54,13 +54,11 @@ android {
 
 def siteUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk'
 def gitUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk.git'
+def description = 'Mobile Control II SDK'
 
 bintray {
     user = project.rootProject.properties['bintray.user']
     key = project.rootProject.properties['bintray.key']
-
-    println user
-    println key
 
     dryRun = false
     publish = false
@@ -69,11 +67,12 @@ bintray {
     pkg {
         repo = 'maven'
         name = project.name
-        desc = 'ESU Mobile Control II SDK'
+        desc = description
         websiteUrl = siteUrl
+        issueTrackerUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk/issues'
         vcsUrl = gitUrl
         licenses = ['MIT']
-        publicDownloadNumbers = false
+        publicDownloadNumbers = true
     }
 }
 
@@ -82,7 +81,7 @@ install {
         pom {
             project {
                 packaging 'aar'
-                name 'Mobile Control II SDK'
+                name description
                 url siteUrl
                 licenses  {
                     license {
