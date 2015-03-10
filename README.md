@@ -24,7 +24,7 @@ You can check if your app is running on the Mobile Control II by calling
 boolean runsOnMc2 = MobileControl2.isMobileControl2();
 ```
 
-The `ThrottleFragment` class and the `MobileControl2.setLedState()` methods are designed to to nothing when not running on the Mobile Control II, so you will not need to check this very often. 
+The `ThrottleFragment` class and the `MobileControl2.setLedState()` methods are designed to do nothing when not running on the Mobile Control II, so you will not need to check this very often. 
 
 ### Throttle
 
