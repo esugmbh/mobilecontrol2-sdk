@@ -9,16 +9,20 @@ Current Version: 1.0
 1. Open the `build.gradle` file of your application. 
 2. Add the SDK to the `dependencies` section:
 
-    dependencies {
-        ...
-        compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.0'
-    } 
+```groovy
+dependencies {
+    ...
+    compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.0'
+}
+```
 
 ## Usage
 
 You can check if your app is running on the Mobile Control II by calling
 
-    boolean runsOnMc2 = MobileControl2.isMobileControl2();
+```java
+boolean runsOnMc2 = MobileControl2.isMobileControl2();
+```
 
 The `ThrottleFragment` class and the `MobileControl2.setLedState()` methods are designed to to nothing when not running on the Mobile Control II, so you will not need to check this very often. 
 
@@ -26,70 +30,72 @@ The `ThrottleFragment` class and the `MobileControl2.setLedState()` methods are 
 
 Add the `ThrottleFragment` to your activitiy:
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ...
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    ...
         
-        mThrottleFragment = ThrottleFragment.newInstance(1);
-        mThrottleFragment.setOnThrottleListener(mOnThrottleListener);
-        getSupportFragmentManager().beginTransaction()
-                .add(mThrottleFragment, "mc2:throttle")
-                .commit();
-
-        ...
-    }
+    mThrottleFragment = ThrottleFragment.newInstance(1);
+    mThrottleFragment.setOnThrottleListener(mOnThrottleListener);
+    getSupportFragmentManager().beginTransaction()
+            .add(mThrottleFragment, "mc2:throttle")
+            .commit();
+    ...
+}
+```
 
 Make sure you ignore the `ThrottleFragment.KEYCODE_THROTTLE_WAKEUP` KeyCode to prevent user input:
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == ThrottleFragment.KEYCODE_THROTTLE_WAKEUP) {
-            return true;
-        }
-
-        ...
+```java
+@Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == ThrottleFragment.KEYCODE_THROTTLE_WAKEUP) {
+        return true;
     }
 
-
-The fragment will do the rest.
+    ...
+}
+```
 
 Move the throttle:
-
-    mThrottleFragment.moveThrottle(position);
-
+```java
+mThrottleFragment.moveThrottle(position);
+```
 Use a `OnThrottleListener` to receive callbacks:
+```java
+private OnThrottleListener mOnThrottleListener = new OnThrottleListener() {
+    @Override
+    public void onButtonDown() {
+        // The throttle button is in pressed state
+    }
 
-    private OnThrottleListener mOnThrottleListener = new OnThrottleListener() {
-        @Override
-        public void onButtonDown() {
-            // The throttle button is in pressed state
-        }
+    @Override
+    public void onButtonUp() {
+        // The throttle button is in released state
+    }
 
-        @Override
-        public void onButtonUp() {
-            // The throttle button is in released state
-        }
+    @Override
+    public void onPositionChanged(int position) {
+        // The new throttle position
+    }
+}; 
+```
 
-        @Override
-        public void onPositionChanged(int position) {
-            // The new throttle position
-        }
-    }; 
- 
 ### LEDs
 
 Turn a LED on:
-
-    MobileControl2.setLedState(MobileControl2.LED_RED, true);
+```java
+MobileControl2.setLedState(MobileControl2.LED_RED, true);
+```
 
 Turn a LED off:
-   
-    MobileControl2.setLedState(MobileControl2.LED_GREEN, false);
-
+```java   
+MobileControl2.setLedState(MobileControl2.LED_GREEN, false);
+```
 LED flashing is also supported:
-
-    MobileControl2.setLedState(MobileControl2.LED_RED, 250, 250);
-
+```java
+MobileControl2.setLedState(MobileControl2.LED_RED, 250, 250);
+```
 Available LEDs are `MobileControl2.LED_GREEN` and `MobileControl2.LED_RED`.
 
 ### Buttons
@@ -103,17 +109,17 @@ The Mobile Control II uses existing Android key codes. The `MobileControl2` clas
 `MobileControl2.KEYCODE_BOTTOM_LEFT`: Bottom left.
 
 Make sure you check you are running on a Mobile Control II for using the key codes:
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (MobileControl2.isMobileControl2()) {
-            // Handle Mobile Control II keys
-        }
-        else {
-           // Handle default keys.
-        }
-    }  
-
+```java
+@Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (MobileControl2.isMobileControl2()) {
+        // Handle Mobile Control II keys
+    }
+    else {
+       // Handle default keys.
+    }
+}  
+```
 
 Checkout the <a href="https://github.com/esugmbh/mobilecontrol2-sdk-sample">Mobile Control II SDK Sample application</a>.
 
@@ -124,6 +130,3 @@ Javadoc is available at <a href="http://esugmbh.github.io/mobilecontrol2-sdk/">h
 ## License
 
 Licensed under the MIT License
-
-
-
