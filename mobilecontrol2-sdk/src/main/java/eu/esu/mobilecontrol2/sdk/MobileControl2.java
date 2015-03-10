@@ -27,19 +27,19 @@ public final class MobileControl2 {
     /**
      * The top right button.
      */
-    public final static int KEY_CODE_RIGHT_TOP = KeyEvent.KEYCODE_BUTTON_2;
+    public final static int KEYCODE_TOP_RIGHT = KeyEvent.KEYCODE_BUTTON_2;
     /**
      * The bottom right button.
      */
-    public final static int KEY_CODE_RIGHT_BOTTOM = KeyEvent.KEYCODE_BUTTON_3;
+    public final static int KEYCODE_BOTTOM_RIGHT = KeyEvent.KEYCODE_BUTTON_3;
     /**
      * The top left button.
      */
-    public final static int KEY_CODE_LEFT_TOP = KeyEvent.KEYCODE_VOLUME_UP;
+    public final static int KEYCODE_TOP_LEFT = KeyEvent.KEYCODE_VOLUME_UP;
     /**
      * The bottom left button.
      */
-    public final static int KEY_CODE_LEFT_BOTTOM = KeyEvent.KEYCODE_VOLUME_DOWN;
+    public final static int KEYCODE_BOTTOM_LEFT = KeyEvent.KEYCODE_VOLUME_DOWN;
     /**
      * The red LED.
      */
