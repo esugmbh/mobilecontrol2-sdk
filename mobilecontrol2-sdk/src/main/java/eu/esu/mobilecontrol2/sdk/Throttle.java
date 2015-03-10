@@ -13,7 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Message;
 
 /**
- * Utility class for the Mobile Control II Throttle.
+ * Utility for using the Mobile Control2 throttle.
  */
 public final class Throttle {
 

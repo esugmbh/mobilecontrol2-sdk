@@ -13,12 +13,12 @@ package eu.esu.mobilecontrol2.sdk;
 public interface OnThrottleListener {
 
     /**
-     * Invoked after the button changed its state to down.
+     * Invoked after the button has been pressed.
      */
     void onButtonDown();
 
     /**
-     * Invoked after the button changed its state to up.
+     * Invoked after the button has been released.
      */
     void onButtonUp();
 

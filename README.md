@@ -6,7 +6,7 @@ Current Version: 1.0
 
 ## Installation
 
-1. Open the `build.gradle` file of your application.
+1. Open the `build.gradle` file of your application. 
 2. Add the SDK to the `dependencies` section:
 
     dependencies {
@@ -75,7 +75,7 @@ Use a `OnThrottleListener` to receive callbacks:
             // The new throttle position
         }
     }; 
-
+ 
 ### LEDs
 
 Turn a LED on:
@@ -91,8 +91,6 @@ LED flashing is also supported:
     MobileControl2.setLedState(MobileControl2.LED_RED, 250, 250);
 
 Available LEDs are `MobileControl2.LED_GREEN` and `MobileControl2.LED_RED`.
-
-Checkout the <a href="https://github.com/esugmbh/mobilecontrol2-sdk-sample">Mobile Control II SDK Sample application</a>.
 
 ### Buttons
 
@@ -115,6 +113,13 @@ Make sure you check you are running on a Mobile Control II for using the key cod
            // Handle default keys.
         }
     }  
+
+
+Checkout the <a href="https://github.com/esugmbh/mobilecontrol2-sdk-sample">Mobile Control II SDK Sample application</a>.
+
+## Javadoc
+
+Javadoc is available at <a href="http://esugmbh.github.io/mobilecontrol2-sdk/">http://esugmbh.github.io/mobilecontrol2-sdk/</a>
 
 ## License
 

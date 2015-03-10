@@ -7,8 +7,6 @@
 
 package eu.esu.mobilecontrol2.sdk;
 
-import android.util.Log;
-
 /**
  * Helper class to convert throttle positions to steps and vice versa.
  */

@@ -39,6 +39,20 @@ import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_UNREGISTER_CLIENT;
  * <p/>
  * This fragment handles the communication with the Mobile Control II throttle service. If throttle service has been
  * detected all methods will do nothing so that the fragment just works if not running on another device.
+ * <p/>
+ * <h3>Usage:</h3>
+ * Add the fragment to your activities' onCreate method and set the {@link eu.esu.mobilecontrol2.sdk.OnThrottleListener}.
+ * <pre> {@code
+ * protected void onCreate(Bundle savedInstanceState) {
+ *     ...
+ *     mThrottleFragment = ThrottleFragment.newInstance(1);
+ *     mThrottleFragment.setOnThrottleListener(mOnThrottleListener);
+ *     getSupportFragmentManager().beginTransaction()
+ *             .add(mThrottleFragment, "mc2:throttle")
+ *             .commit();
+ * }
+ * }
+ * </pre>
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class ThrottleFragment extends Fragment {
@@ -54,9 +68,8 @@ public class ThrottleFragment extends Fragment {
      *     if (keyEvent == ThrottleFragment.KEYCODE_THROTTLE_WAKEUP) {
      *         return true;
      *     }
-     * <p/>
      *     return super.onKeyDown(keyCode, keyEvent);
-     * }
+     * }}
      * </pre>
      */
     public static final int KEYCODE_THROTTLE_WAKEUP = KeyEvent.KEYCODE_BUTTON_16;
@@ -102,7 +115,7 @@ public class ThrottleFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt("zeroPosition", checkPosition(zeroPosition));
 
-        ThrottleFragment fragment =  new ThrottleFragment();
+        ThrottleFragment fragment = new ThrottleFragment();
         fragment.setArguments(args);
         return fragment;
     }
