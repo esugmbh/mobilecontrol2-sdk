@@ -59,7 +59,7 @@ public final class Throttle {
     public static final int MSG_BUTTON_UP = 7;
 
     /**
-     * The package mobile control II package URI.
+     * The service package.
      */
     public static final String SERVICE_PACKAGE = "eu.esu.mobilecontrol2.throttle";
 

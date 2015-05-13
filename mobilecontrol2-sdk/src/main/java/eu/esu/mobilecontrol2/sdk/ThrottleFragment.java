@@ -41,7 +41,7 @@ import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_UNREGISTER_CLIENT;
  * detected all methods will do nothing so that the fragment just works if not running on another device.
  * <p/>
  * <h3>Usage:</h3>
- * Add the fragment to your activities' onCreate method and set the {@link eu.esu.mobilecontrol2.sdk.OnThrottleListener}.
+ * Add the fragment to the activity's onCreate method and set the {@link eu.esu.mobilecontrol2.sdk.OnThrottleListener}.
  * <pre> {@code
  * protected void onCreate(Bundle savedInstanceState) {
  *     ...
@@ -74,7 +74,7 @@ public class ThrottleFragment extends Fragment {
      */
     public static final int KEYCODE_THROTTLE_WAKEUP = KeyEvent.KEYCODE_BUTTON_16;
 
-    private final static String TAG = "Mobile Control II Throttle";
+    private final static String TAG = "Throttle";
 
     private Messenger mReceiver;
     private Messenger mSender;
