@@ -97,18 +97,18 @@ public final class MobileControl2 {
      * If not running on a Mobile Control II device this code does nothing.
      *
      * @param which The LED, {@link #LED_RED} or {@link #LED_GREEN}.
-     * @param onMs  The number of milliseconds for the LED to be on while it's flashing.
-     * @param offMs The number of milliseconds for the LED to be off while it's flashing.
+     * @param onMillis  The number of milliseconds for the LED to be on while it's flashing.
+     * @param offMillis The number of milliseconds for the LED to be off while it's flashing.
      */
-    public static void setLedState(int which, int onMs, int offMs) {
+    public static void setLedState(int which, int onMillis, int offMillis) {
         if (!RUNS_ON_MOBILECONTROL2) {
             return;
         }
 
         try {
             writeText(ledPath(which, "trigger"), "timer");
-            writeText(ledPath(which, "delay_on"), Integer.toString(onMs));
-            writeText(ledPath(which, "delay_off"), Integer.toString(offMs));
+            writeText(ledPath(which, "delay_on"), Integer.toString(onMillis));
+            writeText(ledPath(which, "delay_off"), Integer.toString(offMillis));
         } catch (IOException ex) {
             Log.e(TAG, "Set brightness failed", ex);
         }
