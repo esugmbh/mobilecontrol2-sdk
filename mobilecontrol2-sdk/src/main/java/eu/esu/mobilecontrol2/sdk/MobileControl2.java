@@ -20,30 +20,32 @@ import java.io.IOException;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public final class MobileControl2 {
-    /**
-     * The stop / go button.
-     */
-    public final static int KEYCODE_STOP = KeyEvent.KEYCODE_BUTTON_1;
+
     /**
      * The top right button.
      */
     public final static int KEYCODE_TOP_RIGHT = KeyEvent.KEYCODE_BUTTON_2;
+
     /**
      * The bottom right button.
      */
     public final static int KEYCODE_BOTTOM_RIGHT = KeyEvent.KEYCODE_BUTTON_3;
+
     /**
      * The top left button.
      */
     public final static int KEYCODE_TOP_LEFT = KeyEvent.KEYCODE_VOLUME_UP;
+
     /**
      * The bottom left button.
      */
     public final static int KEYCODE_BOTTOM_LEFT = KeyEvent.KEYCODE_VOLUME_DOWN;
+
     /**
      * The red LED.
      */
     public final static int LED_RED = 1;
+
     /**
      * The greed LED.
      */

@@ -11,10 +11,10 @@ import android.content.Intent;
 import android.os.Message;
 
 /**
- * A fragment which provides access to the Mobile Control II Stop key.
+ * Provides simple access to stop key events.
  * <p/>
- * This fragment handles the communication with the Stop Button Service. If the ESU Input Services package is not installed
- * all methods will not perform any action so that the fragment just works if running on another device.
+ * This fragment handles the communication with the Stop Button Service. If the ESU Input Services package is not
+ * installed all methods will not perform any action so that the fragment just works if running on another device.
  * <p/>
  * <h3>Usage:</h3>
  * Add the fragment to the activity and set the {@see OnStopButtonListener}.
@@ -37,6 +37,7 @@ public class StopButtonFragment extends MessageServiceFragment {
      * Callback message  when the stop button is pressed.
      */
     private static final int MSG_STOP_BUTTON_DOWN = 3;
+
     /**
      * Callback message when the stop button is released.
      */

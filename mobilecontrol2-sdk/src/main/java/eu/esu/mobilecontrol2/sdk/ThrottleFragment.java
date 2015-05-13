@@ -16,13 +16,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 /**
- * A fragment which provides access the Mobile Control II throttle.
+ * Provides simple access the throttle.
  * <p/>
  * This fragment handles the communication with the throttle service. If the ESU Input Services package is not installed
  * all methods will do nothing so that the fragment just works if running on another device.
  * <p/>
  * <h3>Usage:</h3>
- * Add the fragment to the activity and set the {@link eu.esu.mobilecontrol2.sdk.OnThrottleListener}.
+ * Add the fragment to the activity and set the {@link eu.esu.mobilecontrol2.sdk.ThrottleFragment.OnThrottleListener}.
  * <pre> {@code
  * protected void onCreate(Bundle savedInstanceState) {
  *     ...
@@ -131,6 +131,11 @@ public class ThrottleFragment extends MessageServiceFragment {
         }
     }
 
+    /**
+     * Sets the listener to receive callbacks from the fragment.
+     *
+     * @param listener The listener.
+     */
     public void setOnThrottleListener(OnThrottleListener listener) {
         mOnThrottleListener = listener;
     }
@@ -162,5 +167,28 @@ public class ThrottleFragment extends MessageServiceFragment {
     @Override
     protected Intent getServiceIntent() {
         return new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
+    }
+
+    /**
+     * Listener interface for throttle callbacks.
+     */
+    public interface OnThrottleListener {
+
+        /**
+         * Invoked after the button has been pressed.
+         */
+        void onButtonDown();
+
+        /**
+         * Invoked after the button has been released.
+         */
+        void onButtonUp();
+
+        /**
+         * Invoked after the throttle position has changed.
+         *
+         * @param position The new position.
+         */
+        void onPositionChanged(int position);
     }
 }

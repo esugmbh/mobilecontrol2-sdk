@@ -28,9 +28,7 @@ import static eu.esu.mobilecontrol2.sdk.InputServices.MSG_UNREGISTER_CLIENT;
 /**
  * Base class for fragments that communicate with a message-based bindable service.
  */
-public abstract class MessageServiceFragment extends Fragment {
-    private final static String TAG = "MessageFragment";
-
+abstract class MessageServiceFragment extends Fragment {
     private Messenger mSender;
     private Messenger mReceiver;
     private boolean mServiceBound;
@@ -59,7 +57,6 @@ public abstract class MessageServiceFragment extends Fragment {
         mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
 
         if (InputServices.isInstalled(getActivity())) {
-            Log.d(TAG, "Found ESU Input Services, binding service");
             getActivity().bindService(
                     getServiceIntent(),
                     mConnection,
@@ -70,7 +67,6 @@ public abstract class MessageServiceFragment extends Fragment {
     @Override
     public void onDestroy() {
         if (mServiceBound) {
-            Log.d(TAG, "Unbinding service");
             final Message message = Message.obtain(null, MSG_UNREGISTER_CLIENT);
             message.replyTo = mReceiver;
             sendMessage(message);
@@ -89,11 +85,16 @@ public abstract class MessageServiceFragment extends Fragment {
      */
     protected abstract Intent getServiceIntent();
 
+    /**
+     * Sends a message to the service.
+     *
+     * @param message The message.
+     */
     protected void sendMessage(Message message) {
         try {
             mSender.send(message);
         } catch (final RemoteException ex) {
-            Log.e(TAG, "Error sending message", ex);
+            Log.e("EsuInputServices", "Failed to send message", ex);
         }
     }
 
@@ -122,10 +123,9 @@ public abstract class MessageServiceFragment extends Fragment {
         public void handleMessage(Message msg) {
             MessageServiceFragment parent = mParent.get();
             if (parent == null) {
-                throw new NullPointerException("parent is null");
+                throw new AssertionError("parent is null");
             }
 
-            Log.d(TAG, "Received message: " + msg.toString());
             parent.onMessageReceived(msg);
         }
     }
