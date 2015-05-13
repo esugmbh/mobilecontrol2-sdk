@@ -55,8 +55,8 @@ public final class MobileControl2 {
 
     private final static boolean RUNS_ON_MOBILECONTROL2 =
             Build.MODEL.equalsIgnoreCase("MobileControlII")
-            || Build.MODEL.equalsIgnoreCase("Mobile Control II")
-            || Build.MODEL.equalsIgnoreCase("SmartController");
+                    || Build.MODEL.equalsIgnoreCase("Mobile Control II")
+                    || Build.MODEL.equalsIgnoreCase("SmartControl");
 
     private MobileControl2() {
     }
