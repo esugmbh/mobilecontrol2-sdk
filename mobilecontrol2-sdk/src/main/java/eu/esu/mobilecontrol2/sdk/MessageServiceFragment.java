@@ -126,7 +126,9 @@ abstract class MessageServiceFragment extends Fragment {
                 throw new AssertionError("parent is null");
             }
 
-            parent.onMessageReceived(msg);
+            if (parent.isResumed()) {
+                parent.onMessageReceived(msg);
+            }
         }
     }
 }

@@ -80,7 +80,6 @@ public class ThrottleFragment extends MessageServiceFragment {
      */
     private static final int MSG_BUTTON_UP = 7;
 
-    private final static String TAG = "Throttle";
     private int mZeroPosition;
     private OnThrottleListener mOnThrottleListener;
 
