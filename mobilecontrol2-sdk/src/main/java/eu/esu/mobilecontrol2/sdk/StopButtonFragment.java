@@ -71,12 +71,24 @@ public class StopButtonFragment extends MessageServiceFragment {
         if (mListener != null) {
             switch (message.what) {
                 case MSG_STOP_BUTTON_DOWN:
-                    mListener.onStopButtonDown();
+                    onStopButtonDown();
                     break;
                 case MSG_STOP_BUTTON_UP:
-                    mListener.onStopButtonUp();
+                    onStopButtonUp();
                     break;
             }
+        }
+    }
+
+    private void onStopButtonDown() {
+        if (mListener != null) {
+            mListener.onStopButtonDown();
+        }
+    }
+
+    private void onStopButtonUp() {
+        if (mListener != null) {
+            mListener.onStopButtonUp();
         }
     }
 

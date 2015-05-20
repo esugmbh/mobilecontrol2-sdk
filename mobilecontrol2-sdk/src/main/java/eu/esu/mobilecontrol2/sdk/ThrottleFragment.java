@@ -148,17 +148,35 @@ public class ThrottleFragment extends MessageServiceFragment {
         if (mOnThrottleListener != null) {
             switch (message.what) {
                 case MSG_BUTTON_DOWN:
-                    mOnThrottleListener.onButtonDown();
+                    onButtonDown();
                     break;
                 case MSG_BUTTON_UP:
-                    mOnThrottleListener.onButtonUp();
+                    onButtonUp();
                     break;
                 case MSG_POSITION_CHANGED:
-                    mOnThrottleListener.onPositionChanged(message.arg1);
+                    onPositionChanged(message.arg1);
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    private void onButtonDown() {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onButtonDown();
+        }
+    }
+
+    private void onButtonUp() {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onButtonUp();
+        }
+    }
+
+    private void onPositionChanged(int position) {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onPositionChanged(position);
         }
     }
 
