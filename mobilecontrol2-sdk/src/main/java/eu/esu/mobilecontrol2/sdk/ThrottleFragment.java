@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 
 /**
@@ -125,7 +124,6 @@ public class ThrottleFragment extends MessageServiceFragment {
      */
     public void moveThrottle(int position) {
         if (isServiceBound()) {
-            Log.d(TAG, "Move Throttle to " + position);
             final Message msg = Message.obtain(null, MSG_MOVE_TO, checkPosition(position), 0);
             sendMessage(msg);
         }

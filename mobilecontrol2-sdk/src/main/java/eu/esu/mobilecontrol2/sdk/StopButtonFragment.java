@@ -17,7 +17,7 @@ import android.os.Message;
  * installed all methods will not perform any action so that the fragment just works if running on another device.
  * <p/>
  * <h3>Usage:</h3>
- * Add the fragment to the activity and set the {@see OnStopButtonListener}.
+ * Add the fragment to the activity and set the {@link OnStopButtonListener}.
  * <pre> {@code
  * protected void onCreate(Bundle savedInstanceState) {
  *     ...
@@ -46,14 +46,14 @@ public class StopButtonFragment extends MessageServiceFragment {
     private OnStopButtonListener mListener;
 
     /**
-     * Creates a new instance of the {@see StopButtonFragment} class.
+     * Creates a new instance of the {@link StopButtonFragment} class.
      */
     public static StopButtonFragment newInstance() {
         return new StopButtonFragment();
     }
 
     /**
-     * Sets the {@see OnStopButtonListener} for the fragment.
+     * Sets the {@link OnStopButtonListener} for the fragment.
      *
      * @param listener The listener.
      */
