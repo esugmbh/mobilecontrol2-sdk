@@ -8,40 +8,20 @@
 package eu.esu.mobilecontrol2.sdk;
 
 import android.annotation.TargetApi;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 
-import java.lang.ref.WeakReference;
-
-import static eu.esu.mobilecontrol2.sdk.Throttle.INTENT_BIND_SERVICE;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_BUTTON_DOWN;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_BUTTON_UP;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_MOVE_TO;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_POSITION_CHANGED;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_REGISTER_CLIENT;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_SET_ZERO_POSITION;
-import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_UNREGISTER_CLIENT;
-
 /**
- * Fragment which provides access the Mobile Control II Throttle service.
+ * Provides simple access the throttle.
  * <p/>
- * This fragment handles the communication with the Mobile Control II throttle service. If throttle service has been
- * detected all methods will do nothing so that the fragment just works if not running on another device.
+ * This fragment handles the communication with the throttle service. If the ESU Input Services package is not installed
+ * all methods will do nothing so that the fragment just works if running on another device.
  * <p/>
  * <h3>Usage:</h3>
- * Add the fragment to your activities' onCreate method and set the {@link eu.esu.mobilecontrol2.sdk.OnThrottleListener}.
+ * Add the fragment to the activity and set the {@link eu.esu.mobilecontrol2.sdk.ThrottleFragment.OnThrottleListener}.
  * <pre> {@code
  * protected void onCreate(Bundle savedInstanceState) {
  *     ...
@@ -55,7 +35,7 @@ import static eu.esu.mobilecontrol2.sdk.Throttle.MSG_UNREGISTER_CLIENT;
  * </pre>
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-public class ThrottleFragment extends Fragment {
+public class ThrottleFragment extends MessageServiceFragment {
 
     /**
      * Key event used to wake up the device.
@@ -74,32 +54,33 @@ public class ThrottleFragment extends Fragment {
      */
     public static final int KEYCODE_THROTTLE_WAKEUP = KeyEvent.KEYCODE_BUTTON_16;
 
-    private final static String TAG = "Mobile Control II Throttle";
+    /**
+     * Message to change the throttle position. Set {@link Message#arg1} to the position. Range: 0 - 255.
+     */
+    private static final int MSG_MOVE_TO = 3;
 
-    private Messenger mReceiver;
-    private Messenger mSender;
-    private boolean mThrottleBound;
+    /**
+     * Message to set the zero position of the throttle. Set {@link Message#arg1} to the position. Range: 0 - 255.
+     */
+    private static final int MSG_SET_ZERO_POSITION = 4;
+
+    /**
+     * Callback message when the position has changed by user input,
+     * {@link Message#arg1} contains the new throttle position. Range: 0 - 126
+     */
+    private static final int MSG_POSITION_CHANGED = 5;
+
+    /**
+     * Callback message when the button is pressed.
+     */
+    private static final int MSG_BUTTON_DOWN = 6;
+
+    /**
+     * Callback message when the button is released.
+     */
+    private static final int MSG_BUTTON_UP = 7;
+
     private int mZeroPosition;
-
-    private final ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mSender = new Messenger(service);
-            final Message msgRegister = Message.obtain(null, MSG_REGISTER_CLIENT);
-            msgRegister.replyTo = mReceiver;
-            sendMessage(msgRegister);
-
-            sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, mZeroPosition, 0));
-            mThrottleBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.w(TAG, "Throttle service disconnected");
-            mThrottleBound = false;
-        }
-    };
-
     private OnThrottleListener mOnThrottleListener;
 
     /**
@@ -131,29 +112,7 @@ public class ThrottleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mZeroPosition = getArguments().getInt("zeroPosition", 0);
-        mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
-
-        if (Throttle.isInstalled(getActivity())) {
-            Log.d(TAG, "Found Mobile Control II Throttle, binding service.");
-            final Intent intent = new Intent(INTENT_BIND_SERVICE);
-            getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mThrottleBound) {
-            Log.d(TAG, "Mobile Control II Throttle no longer needed, unbinding service.");
-            final Message msg = Message.obtain(null, MSG_UNREGISTER_CLIENT);
-            msg.replyTo = mReceiver;
-            sendMessage(msg);
-
-            getActivity().unbindService(mConnection);
-        }
-
-        super.onDestroy();
+        mZeroPosition = getArguments().getInt("zeroPosition");
     }
 
     /**
@@ -163,61 +122,88 @@ public class ThrottleFragment extends Fragment {
      * @throws java.lang.IllegalArgumentException "position" is out of range.
      */
     public void moveThrottle(int position) {
-        if (mThrottleBound) {
+        if (isServiceBound()) {
             final Message msg = Message.obtain(null, MSG_MOVE_TO, checkPosition(position), 0);
             sendMessage(msg);
         }
     }
 
+    /**
+     * Sets the listener to receive callbacks from the fragment.
+     *
+     * @param listener The listener.
+     */
     public void setOnThrottleListener(OnThrottleListener listener) {
         mOnThrottleListener = listener;
     }
 
-    private void sendMessage(Message msg) {
-        try {
-            mSender.send(msg);
-        } catch (final RemoteException ex) {
-            Log.e(TAG, "Message not sent to throttle.", ex);
+    @Override
+    protected void onServiceConnected() {
+        sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, mZeroPosition, 0));
+    }
+
+    @Override
+    protected void onMessageReceived(Message message) {
+        if (mOnThrottleListener != null) {
+            switch (message.what) {
+                case MSG_BUTTON_DOWN:
+                    onButtonDown();
+                    break;
+                case MSG_BUTTON_UP:
+                    onButtonUp();
+                    break;
+                case MSG_POSITION_CHANGED:
+                    onPositionChanged(message.arg1);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
-    private static class IncomingMessageHandler extends Handler {
-        private final WeakReference<ThrottleFragment> mParent;
-
-        public IncomingMessageHandler(WeakReference<ThrottleFragment> parent) {
-            if (parent == null) {
-                throw new NullPointerException("parent is null");
-            }
-
-            mParent = parent;
+    private void onButtonDown() {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onButtonDown();
         }
+    }
 
-        @Override
-        public void handleMessage(Message msg) {
-            final ThrottleFragment parent = mParent.get();
-            if (parent == null) {
-                throw new NullPointerException();
-            }
-
-            final OnThrottleListener listener = parent.mOnThrottleListener;
-            if (listener != null) {
-                switch (msg.what) {
-                    case MSG_BUTTON_DOWN:
-                        listener.onButtonDown();
-                        break;
-                    case MSG_BUTTON_UP:
-                        listener.onButtonUp();
-                        break;
-                    case MSG_POSITION_CHANGED:
-                        listener.onPositionChanged(msg.arg1);
-                        break;
-                    default:
-                        super.handleMessage(msg);
-                        break;
-                }
-            } else {
-                super.handleMessage(msg);
-            }
+    private void onButtonUp() {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onButtonUp();
         }
+    }
+
+    private void onPositionChanged(int position) {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onPositionChanged(position);
+        }
+    }
+
+    @Override
+    protected Intent getServiceIntent() {
+        return new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
+    }
+
+    /**
+     * Listener interface for throttle callbacks.
+     */
+    public interface OnThrottleListener {
+
+        /**
+         * Invoked after the button has been pressed.
+         */
+        void onButtonDown();
+
+        /**
+         * Invoked after the button has been released.
+         */
+        void onButtonUp();
+
+        /**
+         * Invoked after the throttle position has changed.
+         *
+         * @param position The new position.
+         */
+        void onPositionChanged(int position);
     }
 }
