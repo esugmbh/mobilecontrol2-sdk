@@ -81,6 +81,7 @@ public class ThrottleFragment extends MessageServiceFragment {
     private static final int MSG_BUTTON_UP = 7;
 
     private int mZeroPosition;
+    private int mLastPosition;
     private OnThrottleListener mOnThrottleListener;
 
     /**
@@ -116,6 +117,15 @@ public class ThrottleFragment extends MessageServiceFragment {
     }
 
     /**
+     * Returns the last known position.
+     *
+     * @return The last known position.
+     */
+    public int getLastPosition() {
+        return mLastPosition;
+    }
+
+    /**
      * Moves the throttle.
      *
      * @param position The new throttle position, range 0 - 255.
@@ -125,6 +135,7 @@ public class ThrottleFragment extends MessageServiceFragment {
         if (isServiceBound()) {
             final Message msg = Message.obtain(null, MSG_MOVE_TO, checkPosition(position), 0);
             sendMessage(msg);
+            mLastPosition = position;
         }
     }
 
@@ -161,6 +172,11 @@ public class ThrottleFragment extends MessageServiceFragment {
         }
     }
 
+    @Override
+    protected Intent getServiceIntent() {
+        return new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
+    }
+
     private void onButtonDown() {
         if (mOnThrottleListener != null) {
             mOnThrottleListener.onButtonDown();
@@ -175,13 +191,9 @@ public class ThrottleFragment extends MessageServiceFragment {
 
     private void onPositionChanged(int position) {
         if (mOnThrottleListener != null) {
+            mLastPosition = position;
             mOnThrottleListener.onPositionChanged(position);
         }
-    }
-
-    @Override
-    protected Intent getServiceIntent() {
-        return new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
     }
 
     /**
