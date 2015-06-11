@@ -46,7 +46,7 @@ public class ThrottleScale {
      */
     public int stepToPosition(int step) {
         if (step >= mStepCount) {
-            throw new IllegalArgumentException("step must be <= stepCount");
+            throw new IllegalArgumentException("step must be < stepCount");
         }
 
         return mLookup[step];
@@ -66,6 +66,15 @@ public class ThrottleScale {
         }
 
         return 0;
+    }
+
+    /**
+     * Returns the current number of steps.
+     *
+     * @return The number of steps.
+     */
+    public int getStepCount() {
+        return mStepCount;
     }
 
     private void createLookup() {
