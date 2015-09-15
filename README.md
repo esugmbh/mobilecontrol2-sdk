@@ -2,7 +2,7 @@
 
 The **Mobile Control II SDK** provides access to the throttle, keys and LEDs.
 
-Current Version: 1.1.0
+Current Version: 1.1.1
 
 ## Installation
 
@@ -12,7 +12,7 @@ Current Version: 1.1.0
 ```groovy
 dependencies {
     ...
-    compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.1.0'
+    compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.1.1'
 }
 ```
 
@@ -113,8 +113,6 @@ private StopButtonFragment.OnStopButtonListener mOnStopButtonListener  = new Sto
         }
     };
 ```
-
-The `onStopButtonDown()` callback will be repeated all 100ms while the button is pressed.
 
 ### LEDs
 
