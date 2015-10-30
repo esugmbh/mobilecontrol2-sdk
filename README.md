@@ -57,10 +57,14 @@ public boolean onKeyDown(int keyCode, KeyEvent event) {
 }
 ```
 
-Move the throttle:
+To change the throttle position call `moveThrottle()` with a value between 0 (start) and 255 (end):
+
 ```java
+// Move the throttle to the middle
+int position = 127; 
 mThrottleFragment.moveThrottle(position);
 ```
+ 
 Use the `ThrottleFragment.OnThrottleListener` to receive callbacks:
 ```java
 private ThrottleFragment.OnThrottleListener mOnThrottleListener = new OnThrottleListener() {
@@ -76,10 +80,23 @@ private ThrottleFragment.OnThrottleListener mOnThrottleListener = new OnThrottle
 
     @Override
     public void onPositionChanged(int position) {
-        // The new throttle position.
+        // The new throttle position from 0 to 255.
     }
 }; 
+```  
+### ThrottleScale
+The `ThrottleScale` class provides a convenient way to convert the throttle position to speed steps and vice versa. The example code shows how to use ThrotleScale for values from 0 - 28.
+ 
+```java          
+   ThrottleScale mThrottleScale = new ThrottleScale(10, 29);
+   
+   // Convert throttle position to speed step
+   int step = mThrottleScale.positionToStep(position);
+   // ... or step to position
+   int position = mThrottleScale.stepToPosition(step);
 ```
+The constructor takes two parameters:  
+The first parameter defines the zero Range: If the throttle position is between 0 - 10 `positionToStep()` will return 0. The second parameter defines the actual number of steps including zero. `0 - 28` <=> `29` steps.
 
 ### Stop Button
 
@@ -153,11 +170,13 @@ public boolean onKeyDown(int keyCode, KeyEvent event) {
 }  
 ```
 
-Checkout the <a href="https://github.com/esugmbh/mobilecontrol2-sdk-sample">Mobile Control II SDK Sample application</a>.
+## Sample App
+
+Checkout the [Mobile Control II SDK sample app](https//github.com/esugmbh/mobilecontrol2-sdk-sample). 
 
 ## Javadoc
 
-Javadoc is available at <a href="http://esugmbh.github.io/mobilecontrol2-sdk/">http://esugmbh.github.io/mobilecontrol2-sdk/</a>
+Javadoc is available at [http://esugmbh.github.io/mobilecontrol2-sdk]()
 
 ## License
 
