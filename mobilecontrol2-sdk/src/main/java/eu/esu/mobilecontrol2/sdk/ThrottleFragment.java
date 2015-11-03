@@ -174,7 +174,9 @@ public class ThrottleFragment extends MessageServiceFragment {
 
     @Override
     protected Intent getServiceIntent() {
-        return new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
+        Intent intent =  new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
+        intent.setPackage(InputServices.SERVICE_PACKAGE);
+        return intent;
     }
 
     private void onButtonDown() {

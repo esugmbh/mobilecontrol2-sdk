@@ -7,6 +7,7 @@
 
 package eu.esu.mobilecontrol2.sdk;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Message;
 
@@ -63,7 +64,9 @@ public class StopButtonFragment extends MessageServiceFragment {
 
     @Override
     protected Intent getServiceIntent() {
-        return new Intent("eu.esu.mobilecontrol2.input.STOP_BUTTON_SERVICE");
+        Intent intent = new Intent("eu.esu.mobilecontrol2.input.STOP_BUTTON_SERVICE");
+        intent.setPackage(InputServices.SERVICE_PACKAGE);
+        return intent;
     }
 
     @Override
