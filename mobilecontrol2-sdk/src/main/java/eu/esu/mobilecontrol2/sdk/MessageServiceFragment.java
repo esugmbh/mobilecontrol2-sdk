@@ -56,7 +56,8 @@ abstract class MessageServiceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mReceiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
 
-        if (InputServices.isInstalled(getActivity())) {
+        // Ignore input services on 3rd party devices to prevent crashes.
+        if (MobileControl2.isMobileControl2() && InputServices.isInstalled(getActivity())) {
             getActivity().bindService(
                     getServiceIntent(),
                     mConnection,
