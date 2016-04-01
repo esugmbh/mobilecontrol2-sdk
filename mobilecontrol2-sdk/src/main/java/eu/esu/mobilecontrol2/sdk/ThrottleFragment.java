@@ -148,9 +148,30 @@ public class ThrottleFragment extends MessageServiceFragment {
         mOnThrottleListener = listener;
     }
 
+    /**
+     * Return the current zero postion.
+     */
+    public int getZeroPosition() {
+        return mZeroPosition;
+    }
+
+    /**
+     * Sets the current zero position.
+     *
+     * @param position The new zero position.
+     */
+    public void setZeroPosition(int position) {
+        if (checkPosition(position) != mZeroPosition) {
+            mZeroPosition = position;
+            if (isServiceBound()) {
+                sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, position, 0));
+            }
+        }
+    }
+
     @Override
     protected void onServiceConnected() {
-        sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, mZeroPosition, 0));
+        setZeroPosition(mZeroPosition);
     }
 
     @Override
