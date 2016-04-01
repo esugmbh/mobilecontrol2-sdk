@@ -7,16 +7,15 @@
 
 package eu.esu.mobilecontrol2.sdk;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Message;
 
 /**
  * Provides simple access to stop key events.
- * <p/>
+ * <p>
  * This fragment handles the communication with the Stop Button Service. If the ESU Input Services package is not
  * installed all methods will not perform any action so that the fragment just works if running on another device.
- * <p/>
+ * </p>
  * <h3>Usage:</h3>
  * Add the fragment to the activity and set the {@link OnStopButtonListener}.
  * <pre> {@code
@@ -29,7 +28,7 @@ import android.os.Message;
  *         .commit();
  * }
  * }
- * <p/>
+ *
  * </pre>
  */
 public class StopButtonFragment extends MessageServiceFragment {
@@ -48,6 +47,8 @@ public class StopButtonFragment extends MessageServiceFragment {
 
     /**
      * Creates a new instance of the {@link StopButtonFragment} class.
+     *
+     * @return The {@link StopButtonFragment}.
      */
     public static StopButtonFragment newInstance() {
         return new StopButtonFragment();

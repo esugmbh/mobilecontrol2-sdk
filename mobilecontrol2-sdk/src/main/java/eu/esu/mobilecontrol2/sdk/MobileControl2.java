@@ -74,8 +74,9 @@ public final class MobileControl2 {
 
     /**
      * Turns a LED on or off.
-     * <p/>
+     * <p>
      * If not running on a Mobile Control II device this code does nothing.
+     * </p>
      *
      * @param which The LED, {@link #LED_RED} or {@link #LED_GREEN}.
      * @param on    {@code true} for on, else {@code false}.
@@ -95,8 +96,9 @@ public final class MobileControl2 {
 
     /**
      * Turns a LED on for flashing.
-     * <p/>
+     * <p>
      * If not running on a Mobile Control II device this code does nothing.
+     * </p>
      *
      * @param which     The LED, {@link #LED_RED} or {@link #LED_GREEN}.
      * @param onMillis  The number of milliseconds for the LED to be on while it's flashing.

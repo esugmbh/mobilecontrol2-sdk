@@ -63,7 +63,13 @@
           </extensions>
         </Objective-C-extensions>
         <XML>
+<<<<<<< HEAD
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+=======
+          <option name="XML_KEEP_LINE_BREAKS" value="false" />
+          <option name="XML_ALIGN_ATTRIBUTES" value="false" />
+          <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
+>>>>>>> e40e9da... Fixed jdk8 javadoc issues.
         </XML>
         <codeStyleSettings language="XML">
           <option name="FORCE_REARRANGE_MODE" value="1" />
@@ -77,7 +83,11 @@
                   <match>
                     <AND>
                       <NAME>xmlns:android</NAME>
+<<<<<<< HEAD
                       <XML_NAMESPACE>Namespace:</XML_NAMESPACE>
+=======
+                      <XML_NAMESPACE />
+>>>>>>> e40e9da... Fixed jdk8 javadoc issues.
                     </AND>
                   </match>
                 </rule>
@@ -87,7 +97,11 @@
                   <match>
                     <AND>
                       <NAME>xmlns:.*</NAME>
+<<<<<<< HEAD
                       <XML_NAMESPACE>Namespace:</XML_NAMESPACE>
+=======
+                      <XML_NAMESPACE />
+>>>>>>> e40e9da... Fixed jdk8 javadoc issues.
                     </AND>
                   </match>
                   <order>BY_NAME</order>

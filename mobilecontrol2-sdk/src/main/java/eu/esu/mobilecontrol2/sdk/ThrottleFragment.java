@@ -16,10 +16,10 @@ import android.view.KeyEvent;
 
 /**
  * Provides simple access the throttle.
- * <p/>
+ * <p>
  * This fragment handles the communication with the throttle service. If the ESU Input Services package is not installed
  * all methods will do nothing so that the fragment just works if running on another device.
- * <p/>
+ * </p>
  * <h3>Usage:</h3>
  * Add the fragment to the activity and set the {@link eu.esu.mobilecontrol2.sdk.ThrottleFragment.OnThrottleListener}.
  * <pre> {@code
@@ -39,10 +39,13 @@ public class ThrottleFragment extends MessageServiceFragment {
 
     /**
      * Key event used to wake up the device.
-     * <p/>
+     * <p>
      * Since {@link android.view.KeyEvent#KEYCODE_WAKEUP} is not available before api level 20 (KITKAT),
      * {@link android.view.KeyEvent#KEYCODE_BUTTON_16} is used. To avoid unexpected input events ignore this key in your
-     * activity, for example:
+     * activity.
+     * </p>
+     *
+     * Example:
      * <pre> {@code
      * public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
      *     if (keyEvent == ThrottleFragment.KEYCODE_THROTTLE_WAKEUP) {
@@ -86,9 +89,10 @@ public class ThrottleFragment extends MessageServiceFragment {
 
     /**
      * Creates a new instance of the {@link eu.esu.mobilecontrol2.sdk.ThrottleFragment} class.
-     * <p/>
+     * <p>
      * The {@code zeroPosition} defines the lowest position where the throttle may stop. If the current position is
      * lower than {@code zeroPosition} the throttle will try to move to the position.
+     * </p>
      *
      * @param zeroPosition The zeroPosition.
      * @return A new throttle fragment instance.
@@ -150,6 +154,8 @@ public class ThrottleFragment extends MessageServiceFragment {
 
     /**
      * Return the current zero position.
+     *
+     * @return The current zero position.
      */
     public int getZeroPosition() {
         return mZeroPosition;
@@ -193,7 +199,7 @@ public class ThrottleFragment extends MessageServiceFragment {
 
     @Override
     protected Intent getServiceIntent() {
-        Intent intent =  new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
+        Intent intent = new Intent("eu.esu.mobilecontrol2.input.THROTTLE_SERVICE");
         intent.setPackage(InputServices.SERVICE_PACKAGE);
         return intent;
     }

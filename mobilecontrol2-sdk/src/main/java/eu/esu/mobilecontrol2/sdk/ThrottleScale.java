@@ -18,8 +18,9 @@ public class ThrottleScale {
 
     /**
      * Creates a new {@link eu.esu.mobilecontrol2.sdk.ThrottleScale} instance.
-     * <p/>
-     * Positions between 0 and {@code zeroOffset} will return 0. Use zeroOffset to avoid unwanted
+     * <p>
+     * Positions between 0 and {@code zeroOffset} will return 0. Use zeroOffset to avoid unwanted.
+     * </p>
      *
      * @param zeroOffset The last position of the zero range.
      * @param stepCount  The number of steps including zero. Must be lower than (255 - {@code zeroOffset}).

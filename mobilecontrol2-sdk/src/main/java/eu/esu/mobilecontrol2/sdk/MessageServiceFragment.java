@@ -26,7 +26,7 @@ import static eu.esu.mobilecontrol2.sdk.InputServices.MSG_REGISTER_CLIENT;
 import static eu.esu.mobilecontrol2.sdk.InputServices.MSG_UNREGISTER_CLIENT;
 
 /**
- * Base class for fragments that communicate with a message-based bindable service.
+ * Base class for fragments that communicate with a message-based bound service.
  */
 abstract class MessageServiceFragment extends Fragment {
     private Messenger mSender;
@@ -83,6 +83,8 @@ abstract class MessageServiceFragment extends Fragment {
 
     /**
      * Returns the service intent.
+     *
+     * @return The intent that is used to bind the service.
      */
     protected abstract Intent getServiceIntent();
 
