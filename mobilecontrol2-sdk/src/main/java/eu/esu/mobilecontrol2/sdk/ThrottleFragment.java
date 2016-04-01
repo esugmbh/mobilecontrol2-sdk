@@ -149,7 +149,7 @@ public class ThrottleFragment extends MessageServiceFragment {
     }
 
     /**
-     * Return the current zero postion.
+     * Return the current zero position.
      */
     public int getZeroPosition() {
         return mZeroPosition;
@@ -161,11 +161,9 @@ public class ThrottleFragment extends MessageServiceFragment {
      * @param position The new zero position.
      */
     public void setZeroPosition(int position) {
-        if (checkPosition(position) != mZeroPosition) {
-            mZeroPosition = position;
-            if (isServiceBound()) {
-                sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, position, 0));
-            }
+        mZeroPosition = checkPosition(position);
+        if (isServiceBound()) {
+            sendMessage(Message.obtain(null, MSG_SET_ZERO_POSITION, position, 0));
         }
     }
 

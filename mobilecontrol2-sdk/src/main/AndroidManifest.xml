@@ -5,6 +5,7 @@
   ~ of the MIT license. See the LICENSE file for details.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="eu.esu.mobilecontrol2.input">
+<manifest package="eu.esu.mobilecontrol2.sdk">
+
     <application/>
 </manifest>
