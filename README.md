@@ -2,7 +2,7 @@
 
 The **Mobile Control II SDK** provides access to the throttle, keys and LEDs.
 
-Current Version: 1.1.1
+Current Version: 1.1.2
 
 ## Installation
 
@@ -12,7 +12,7 @@ Current Version: 1.1.1
 ```groovy
 dependencies {
     ...
-    compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.1.1'
+    compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.1.2'
 }
 ```
 
