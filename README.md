@@ -172,11 +172,11 @@ public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 ## Sample App
 
-Checkout the [Mobile Control II SDK sample app](https//github.com/esugmbh/mobilecontrol2-sdk-sample). 
+Checkout the [Mobile Control II SDK sample app](https://github.com/esugmbh/mobilecontrol2-sdk-sample). 
 
 ## Javadoc
 
-Javadoc is available at [http://esugmbh.github.io/mobilecontrol2-sdk]()
+Javadoc is available at [http://esugmbh.github.io/mobilecontrol2-sdk](http://esugmbh.github.io/mobilecontrol2-sdk)
 
 ## License
 
