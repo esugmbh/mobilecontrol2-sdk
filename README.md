@@ -2,17 +2,25 @@
 
 The **Mobile Control II SDK** provides access to the throttle, keys and LEDs.
 
-Current Version: 1.1.2
+Current Version: 1.1.5
 
 ## Installation
 
 1. Open the `build.gradle` file of your application. 
-2. Add the SDK to the `dependencies` section:
+2. Use mavenCentral() as repository
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+```
+3. Add the SDK to the `dependencies` section:
 
 ```groovy
 dependencies {
     ...
-    compile 'eu.esu.mobilecontrol2:mobilecontrol2-sdk:1.1.2'
+    implementation 'io.github.esugmbh:mobilecontrol2-sdk:1.1.4'
 }
 ```
 
@@ -147,6 +155,19 @@ LED flashing is also supported:
 MobileControl2.setLedState(MobileControl2.LED_RED, 250, 250);
 ```
 Available LEDs are `MobileControl2.LED_GREEN` and `MobileControl2.LED_RED`.
+
+### Physical Slider (Mobile Control Pro)
+Use the `ThrottleFragment.OnThrottleListener` to receive callbacks:
+```java
+private ThrottleFragment.OnThrottleListener mOnThrottleListener = new OnThrottleListener() {
+        ...
+    @Override
+    public void onPhysicalSliderPositionChanged(int position) {
+        // The new physical sliders position from 0 to 255.
+    }
+}; 
+``` 
+
 
 ### Side buttons
 

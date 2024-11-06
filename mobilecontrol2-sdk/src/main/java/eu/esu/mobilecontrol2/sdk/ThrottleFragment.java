@@ -7,9 +7,7 @@
 
 package eu.esu.mobilecontrol2.sdk;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.KeyEvent;
@@ -34,7 +32,6 @@ import android.view.KeyEvent;
  * }
  * </pre>
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class ThrottleFragment extends MessageServiceFragment {
 
     /**
@@ -82,6 +79,12 @@ public class ThrottleFragment extends MessageServiceFragment {
      * Callback message when the button is released.
      */
     private static final int MSG_BUTTON_UP = 7;
+
+    /**
+     * Callback when the phisical slider's position has changed by user input,
+     * {@link Message#arg1} contains the new slider position.
+     */
+    public static final int MSG_PHYSICAL_SLIDER_POSITION_CHANGED = 8;
 
     private int mZeroPosition;
     private int mLastPosition;
@@ -191,6 +194,9 @@ public class ThrottleFragment extends MessageServiceFragment {
                 case MSG_POSITION_CHANGED:
                     onPositionChanged(message.arg1);
                     break;
+                case MSG_PHYSICAL_SLIDER_POSITION_CHANGED:
+                    onPhysicalSliderPositionChanged(message.arg1);
+                    break;
                 default:
                     break;
             }
@@ -223,6 +229,12 @@ public class ThrottleFragment extends MessageServiceFragment {
         }
     }
 
+    private void onPhysicalSliderPositionChanged(int pos) {
+        if (mOnThrottleListener != null) {
+            mOnThrottleListener.onPhysicalSliderPositionChanged(pos);
+        }
+    }
+
     /**
      * Listener interface for throttle callbacks.
      */
@@ -244,5 +256,12 @@ public class ThrottleFragment extends MessageServiceFragment {
          * @param position The new position.
          */
         void onPositionChanged(int position);
+
+        /**
+         * Invoked after the physical slider's position has changed by the user.
+         *
+         * @param position The new position.
+         */
+        void onPhysicalSliderPositionChanged(int position);
     }
 }

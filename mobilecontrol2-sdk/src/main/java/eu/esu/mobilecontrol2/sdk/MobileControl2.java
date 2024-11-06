@@ -58,7 +58,9 @@ public final class MobileControl2 {
     private final static boolean RUNS_ON_MOBILECONTROL2 =
             Build.MODEL.equalsIgnoreCase("MobileControlII")
                     || Build.MODEL.equalsIgnoreCase("Mobile Control II")
-                    || Build.MODEL.equalsIgnoreCase("SmartControl");
+                    || Build.MODEL.equalsIgnoreCase("SmartControl")
+                    || Build.MODEL.equalsIgnoreCase("Mobile Control IIs")
+                    || Build.MODEL.equalsIgnoreCase("Mobile Control Pro");
 
     private MobileControl2() {
     }
@@ -111,10 +113,14 @@ public final class MobileControl2 {
 
         try {
             writeText(ledPath(which, "trigger"), "timer");
-            writeText(ledPath(which, "delay_on"), Integer.toString(onMillis));
-            writeText(ledPath(which, "delay_off"), Integer.toString(offMillis));
         } catch (IOException ex) {
             Log.e(TAG, "Set brightness failed", ex);
+        }
+        try {
+            writeText(ledPath(which, "delay_on"), Integer.toString(onMillis));
+            writeText(ledPath(which, "delay_off"), Integer.toString(offMillis));
+        } catch (IOException e) {
+            Log.i(TAG, "Set delay for blinking LED failed ");
         }
     }
 
@@ -142,9 +148,6 @@ public final class MobileControl2 {
             fs = new FileOutputStream(fileName);
             fs.write(text.getBytes());
             fs.flush();
-        } catch (IOException ex) {
-            Log.e(TAG, "Write to file failed", ex);
-            throw new IOException("Write to file failed.", ex);
         } finally {
             try {
                 if (fs != null) {

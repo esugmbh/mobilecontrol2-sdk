@@ -1,48 +1,40 @@
-/*
- * Copyright (c) 2015 ESU electronic solutions ulm GmbH & Co KG
- *
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 buildscript {
     repositories {
-        jcenter()
+//        maven {
+//            url 'https://repo1.maven.org/maven2/'
+//        }
+        mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.android.tools.build:gradle:8.2.0'
     }
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-
-// Maven settings
-version = '1.1.2'
-group = 'eu.esu.mobilecontrol2'
-
-
-repositories {
-    jcenter()
+plugins {
+    id 'org.jreleaser' version '1.14.0'
+    id 'com.android.library'
+    id 'maven-publish'
 }
 
+// Maven settings
+group = 'eu.esu.mobilecontrol2'
+version = '1.1.5'
+
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdk 34
+    namespace 'eu.esu.mobilecontrol2.sdk'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
-        versionCode 2
-        versionName version
+        minSdkVersion 16
+        targetSdkVersion 34
+        versionCode 3
+        versionName = version
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
         release {
@@ -51,75 +43,139 @@ android {
         }
     }
 }
-
-def siteUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk'
-def gitUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk.git'
-def description = 'Mobile Control II SDK'
-
-bintray {
-    user = project.rootProject.properties['bintray.user']
-    key = project.rootProject.properties['bintray.key']
-
-    dryRun = false
-    publish = false
-
-    configurations = ['archives']
-    pkg {
-        repo = 'maven'
-        name = project.name
-        desc = description
-        websiteUrl = siteUrl
-        issueTrackerUrl = 'https://github.com/esugmbh/mobilecontrol2-sdk/issues'
-        vcsUrl = gitUrl
-        licenses = ['MIT']
-        publicDownloadNumbers = true
-    }
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name description
-                url siteUrl
-                licenses  {
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    destinationDir = file("$buildDir/docs/javadoc")
+//}
+//
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    archiveClassifier.set('javadoc')
+//    from javadoc.destinationDir
+//}
+
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set('javadoc')
+
+    doFirst {
+        // Define the output directory for Javadoc
+        def javadocDir = file("$buildDir/docs/javadoc")
+        javadocDir.mkdirs() // Ensure the directory exists
+
+        // Collect source directories as a path string
+        def sourcePaths = android.sourceSets.main.java.srcDirs.collect { it.path }.join(File.pathSeparator)
+
+        // Use Ant to generate the Javadoc
+        ant.javadoc(destdir: javadocDir, sourcepath: sourcePaths, classpath: android.bootClasspath.join(File.pathSeparator)) {
+            // Optionally exclude files
+            // exclude(name: "**/R.java")
+            // exclude(name: "**/BuildConfig.java")
+        }
+    }
+
+    // Package the generated Javadoc files into the JAR
+    from("$buildDir/docs/javadoc")
+}
+// Task to generate javadoc jar (requires Dokka or other documentation tool for Android)
+//task javadocJar(type: Jar) {
+//    archiveClassifier.set('javadoc')
+//    from 'src/main/java'  // Replace with actual path if using a documentation tool
+//}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.github.esugmbh' // Replace with your actual groupId
+            artifactId = project.name
+            version = version
+
+//            from components.java
+//            afterEvaluate {
+//                from components.release
+//            }
+            afterEvaluate {
+                artifact("$buildDir/outputs/aar/${project.name}-release.aar")
+            }
+
+            artifact sourceJar
+            artifact javadocJar
+
+            pom {
+                name = 'Mobile Control II SDK'
+                description = 'Mobile Control II SDK'
+                url = 'https://github.com/esugmbh/mobilecontrol2-sdk'
+                licenses {
                     license {
                         name = 'MIT license'
-                        url 'http://opensource.org/licenses/mit-license.php'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'Test'
+                        name = 'ESU Android dev'
                     }
                 }
                 scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
+                    connection = 'scm:git:https://github.com/esugmbh/mobilecontrol2-sdk.git'
+                    developerConnection = 'scm:git:ssh://github.com/esugmbh/mobilecontrol2-sdk.git'
+                    url = 'http://github.com/esugmbh/mobilecontrol2-sdk'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
+}
+
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('target/staging-deploy')
                 }
             }
         }
     }
 }
 
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier 'sources'
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('target/staging-deploy')
+                }
+            }
+        }
+    }
 }
 
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
-    classifier 'javadoc'
-}
-
-artifacts {
-    archives javadocJar
-    archives sourceJar
-}
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:support-v4:25.3.1"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
 }

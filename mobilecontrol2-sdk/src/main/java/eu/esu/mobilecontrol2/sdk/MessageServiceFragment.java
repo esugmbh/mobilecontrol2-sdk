@@ -17,13 +17,14 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
 import static eu.esu.mobilecontrol2.sdk.InputServices.MSG_REGISTER_CLIENT;
 import static eu.esu.mobilecontrol2.sdk.InputServices.MSG_UNREGISTER_CLIENT;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Base class for fragments that communicate with a message-based bound service.
