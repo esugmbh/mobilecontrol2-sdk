@@ -19,7 +19,7 @@ plugins {
 
 // Maven settings
 group = 'eu.esu.mobilecontrol2'
-version = '1.1.5'
+version = '1.1.7'
 
 android {
     compileSdk 34
@@ -104,7 +104,7 @@ publishing {
             }
 
             artifact sourceJar
-            artifact javadocJar
+//            artifact javadocJar
 
             pom {
                 name = 'Mobile Control II SDK'
